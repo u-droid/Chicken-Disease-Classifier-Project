@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from cnn_classifier.constants import CONFIG_FILE_PATH, PARAMS_FILE_PATH
 from cnn_classifier.utils.common import read_yaml, create_directories
-from cnn_classifier.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig
+from cnn_classifier.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig, EvaluationConfig
 
 class ConfigurationManager:
     def __init__(self, config_filepath = CONFIG_FILE_PATH, params_filepath = PARAMS_FILE_PATH):
@@ -61,3 +61,12 @@ class ConfigurationManager:
             params_learning_rate=self.params.LEARNING_RATE
         )
         return training_config
+
+    def get_validation_config(self) -> EvaluationConfig:
+        eval_config = EvaluationConfig(
+            path_of_model="artifacts/training/trained_model.pt",
+            training_data="artifacts/data_ingestion/Chicken-fecal-images/",
+            all_params=self.params,
+            params_batch_size=self.params.BATCH_SIZE
+        )
+        return eval_config
